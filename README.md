@@ -16,25 +16,17 @@ There are no additional Neovim plugin dependencies.
 
 ## Installation
 
-For a local checkout, add this spec to your [lazy.nvim](https://github.com/folke/lazy.nvim) plugin list. Adjust `dir` to your checkout location:
+Add this spec to your [lazy.nvim](https://github.com/folke/lazy.nvim) plugin list:
 
 ```lua
 {
-  dir = vim.fn.expand("~/prog/neoranger.nvim"),
-  name = "neoranger.nvim",
+  "TheOddKn1ght/neoranger.nvim",
   lazy = false,
   opts = {},
 }
 ```
 
 Set `vim.g.mapleader` before loading plugins. With Space as the leader, the default shortcut is Space followed by lowercase `r`.
-
-Alternatively, add the checkout to `runtimepath` and call setup:
-
-```lua
-vim.opt.runtimepath:append(vim.fn.expand("~/prog/neoranger.nvim"))
-require("neoranger").setup({})
-```
 
 ## Configuration
 
@@ -88,18 +80,3 @@ Directory confirmation executes `:cd` in the originating window. Other windows o
 
 Ranger's file-selection protocol separates paths with newlines, so filenames containing newlines are unsupported. Spaces, Unicode, and shell punctuation are supported. Selected directories are skipped when opening files; use directory confirmation to change the working directory.
 
-## Checks
-
-Run from the checkout with Neovim and Python 3 installed:
-
-```sh
-nvim --headless -u NONE -i NONE -l tests/run.lua
-```
-
-Run the real Ranger smoke tests as well:
-
-```sh
-nvim --headless -u NONE -i NONE -l tests/ranger.lua
-```
-
-The smoke tests run Ranger in a pseudo-terminal with `--clean`, use temporary fixtures, and exercise its keyboard interface. No build step is needed.
