@@ -137,8 +137,8 @@ local function open_files(content)
         local ok, err = pcall(function()
           local buf = vim.fn.bufadd(path)
           vim.fn.bufload(buf)
-          vim.cmd.tabnew()
-          vim.api.nvim_win_set_buf(0, buf)
+          vim.bo[buf].buflisted = true
+          vim.cmd("tab sbuffer " .. buf)
           first_tab = first_tab or vim.api.nvim_get_current_tabpage()
         end)
         if not ok then

@@ -154,9 +154,19 @@ test("multiple files create ordered tabs and preserve unsaved source", function(
   H.eq(#tabs, 3)
   H.eq(vim.api.nvim_get_current_tabpage(), tabs[2])
   H.eq(vim.api.nvim_buf_get_name(0), one)
-  H.eq(vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(vim.api.nvim_tabpage_get_win(tabs[3]))), two)
+  assert(vim.bo.buflisted, "first selected file must appear in buffer lists")
+  local second = vim.api.nvim_win_get_buf(vim.api.nvim_tabpage_get_win(tabs[3]))
+  H.eq(vim.api.nvim_buf_get_name(second), two)
+  assert(vim.bo[second].buflisted, "second selected file must appear in buffer lists")
   H.eq(vim.api.nvim_buf_get_lines(origin, 0, -1, false), { "unsaved work" })
   assert(vim.bo[origin].modified)
+  local listed = {}
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.bo[buf].buflisted then
+      listed[#listed + 1] = buf
+    end
+  end
+  H.eq(#listed, 3, "only the original buffer and selected files should be listed")
   H.eq(vim.fn.getcwd(-1, -1), cwd)
 end)
 
